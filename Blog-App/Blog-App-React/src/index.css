@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.bgColor{
+    background: linear-gradient(to right, #18eee0, #66cafb, #1e53e4);
+}
+
+.textColor{
+    background: linear-gradient(to left,#18eee0, #46ddf5, #1e53e4);
+}
