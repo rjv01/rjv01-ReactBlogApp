@@ -8,7 +8,7 @@ export default function PostPage({posts,handleDelete}) {
     <div>
       {post && 
         <div className='min-h-screen border flex flex-col justify-start items-center'>
-          <h2 className='text-xl font-serif'>{post.title}</h2>
+          <h2 className='text-xl font-serif capitalize text-orange-600'>{post.title}</h2>
           <div className='flex justify-center items-center'>
             <p className='text-xl font-serif underline'>{post.datetime}</p>
           </div>

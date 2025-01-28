@@ -3,16 +3,29 @@ import { Link } from 'react-router-dom'
 
 export default function Post({post}) {
   return (
-    <div className='border border-white m-3 p-3 w-[320px] shadow-2xl rounded-2xl text-xl gap-3 h-[130px]'>
-        <Link to={`/post/${post.id}`} >
-            <h2 className='hover:underline hover:text-2xl duration-200'>{post.title}</h2>
-            <p className='text-lg'>{post.datetime}</p>
-        </Link>
-        <p>{
+    <div className='border border-white m-5 p-5 w-[320px] shadow-2xl rounded-2xl text-xl h-[230px]'>
+            <h2 
+              className='hover:underline duration-200 capitalize font-mono text-orange-500'>
+              {
+                (post.title).length <= 15 ? 
+                (post.title) : `${(post.title).slice(0,15)}...`
+              }
+              </h2>
+            <p className='text-sm font-bold'>{post.datetime}</p>
+        <p
+          className='capitalize'
+        >{
             (post.body).length <= 25 ? 
                 (post.body) 
                 : `${(post.body).slice(0,25)}...`    
         }</p>
+        <div className='flex justify-center items-center'>
+          <Link to={`/post/${post.id}`} >
+                <button
+                  className='m-4 p-4 text-red-600 hover:bg-red-600 hover:text-white duration-300 rounded-xl cursor-pointer'
+                >Read More</button>
+          </Link>
+        </div>
     </div>
   )
 }
