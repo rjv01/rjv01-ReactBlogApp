@@ -19,6 +19,13 @@ export default function PostPage({posts,handleDelete}) {
           >
             Delete Post
           </button>
+          <Link to={`/edit/${post.id}`}>
+            <button
+              className='m-4 p-4 text-2xl font-mono hover:font-bold hover:text-white shadow-lg rounded-xl hover:bg-green-500 duration-200 cursor-pointer'
+            >
+              Edit Post
+            </button>
+          </Link>
         </div>
       }
       {!post && 

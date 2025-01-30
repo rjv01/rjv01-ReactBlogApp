@@ -8,9 +8,13 @@ import Footer from './Components/Footer';
 import NewPost from './Components/NewPost';
 import PostPage from './Components/PostPage';
 import Missing from './Components/Missing';
+import api from './api/posts';
+import EditPost from './Components/EditPost';
+
 import {format} from 'date-fns';
 
 function App() {
+  //localstorage
   const [posts, setPosts] = useState(() => {
     return JSON.parse(localStorage.getItem('blog')) || [
       {
@@ -40,11 +44,37 @@ function App() {
     ];
   });
 
+
+  //api localhost:3500
+  // const [posts,setPosts] = useState([]);
+
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle,setPostTitle] = useState('');
   const [postBody,setPostBody] = useState('');
 
+  const [editTitle,setEditTitle] = useState('');
+  const [editBody,setEditBody] = useState('');
+
+  // api localhost:3500
+  // useEffect(()=>{
+  //   const fetchPost = async()=>{
+  //     try{
+  //       const response = await api.get('/posts');
+  //       setPosts(response.data);
+  //     }catch(err){
+  //       if(err.response){
+  //         console.log(err.response.data);
+  //         console.log(err.response.status);
+  //         console.log(err.response.headers);
+  //       }
+  //       else{
+  //         console.log(`Error: ${err.message}`);
+  //       }
+  //     }
+  //   }
+  //   fetchPost();
+  // },[]);
 
   useEffect(()=>{
     const filteredResults = posts.filter((post)=>
@@ -54,6 +84,9 @@ function App() {
      setSearchResults(filteredResults.reverse());
   },[posts,search]);
 
+  
+
+  // localstorage
   useEffect(()=>{
     localStorage.setItem("blog",JSON.stringify(posts))
   },[posts]);
@@ -85,6 +118,19 @@ function App() {
             }
           />
           <Route
+            path="/edit/:id"
+            element={
+              <EditPostWrapper
+                posts={posts}
+                setPosts={setPosts}
+                editBody={editBody}
+                setEditBody={setEditBody}
+                editTitle={editTitle}
+                setEditTitle={setEditTitle}
+              />
+            }
+          />
+          <Route
             path="/post/:id"
             element={
               <PostPageWrapper
@@ -103,23 +149,132 @@ function App() {
   );
 }
 
+
+// api localhost:3500
+// function PostPageWrapper({ posts, setPosts }) {
+//   const navigate = useNavigate();
+  
+//   async function handleDelete(id) {
+//     try{
+//       await api.delete(`/posts/${id}`);
+      
+//       const postList = posts.filter((post) => post.id !== id);
+//       setPosts(postList);
+//       navigate('/');
+//     }catch(err){
+//       console.log(`Error: ${err.message}`);
+//     }
+//   }
+  
+//   return <PostPage 
+//   posts={posts} 
+//   handleDelete={handleDelete} 
+//   />;
+// }
+
+// localSotrage
 function PostPageWrapper({ posts, setPosts }) {
-  const navigate = useNavigate();
-
-  function handleDelete(id) {
-    const postList = posts.filter((post) => post.id !== id);
-    setPosts(postList);
-    localStorage.setItem('blog',JSON.stringify(postList));
-    navigate('/');
+    const navigate = useNavigate();
+     function handleDelete(id) {
+          const postList = posts.filter((post) => post.id !== id);
+          setPosts(postList);
+          localStorage.setItem('blog',JSON.stringify(postList));
+          navigate('/');
+      }
+      return <PostPage posts={posts} handleDelete={handleDelete} />;
   }
+    
+  // api localhost:3500
+  // function EditPostWrapper({ posts, setPosts, setEditBody, setEditTitle, editBody, editTitle }) {
+  //   const navigate = useNavigate();
 
-  return <PostPage posts={posts} handleDelete={handleDelete} />;
-}
+  //   async function handleEdit(id) {
+  //     const datetime = format(new Date(), 'MMMM dd,yyyy pp');
+  //     const updatedPost = { id, title: editTitle, datetime, body: editBody };
 
-function NewPostWrapper({postBody,setPostBody,postTitle,setPostTitle,posts,setPosts}){
-  const navigate = useNavigate();
+  //     try {
+  //       const response = await api.put(`/posts/${id}`, updatedPost);
+  //       setPosts(posts.map(post => post.id === id ? { ...response.data } : post));
+  //       setEditTitle('');
+  //       setEditBody('');
+  //       navigate('/');
+  //     } catch (err) {
+  //       console.log(`Error: ${err.message}`);
+  //     }
+  //   }
 
+  //   return <EditPost 
+  //     posts={posts}
+  //     setPosts={setPosts}
+  //     editBody={editBody}
+  //     editTitle={editTitle}
+  //     setEditBody={setEditBody}
+  //     setEditTitle={setEditTitle}
+  //     handleEdit={handleEdit}
+  //   />;
+  // }
+
+  //localstroage
+  function EditPostWrapper({ posts, setPosts, setEditBody, setEditTitle, editBody, editTitle }) {
+    const navigate = useNavigate();
+
+    function handleEdit(id) {
+      const datetime = format(new Date(), 'MMMM dd,yyyy pp');
+      const updatedPost = { id, title: editTitle, datetime, body: editBody };
+      setPosts(posts.map(post => post.id === id ? { ...updatedPost } : post));
+      setEditTitle('');
+      setEditBody('');
+      localStorage.setItem('blog', JSON.stringify(posts.map(post => post.id === id ? { ...updatedPost } : post)));
+      navigate('/');
+    }
+
+    return <EditPost 
+      posts={posts}
+      setPosts={setPosts}
+      editBody={editBody}
+      editTitle={editTitle}
+      setEditBody={setEditBody}
+      setEditTitle={setEditTitle}
+      handleEdit={handleEdit}
+    />;
+  }
+  
+    
+    
+  
+  // api localhost:3500
+  // function NewPostWrapper({postBody,setPostBody,postTitle,setPostTitle,posts,setPosts}){
+  //   const navigate = useNavigate();
+
+  //   async function handleSubmit(e){
+  //     e.preventDefault();
+  //     if (postTitle.trim() === '' || postBody.trim() === '') {
+  //       alert('Both Title and Body fields must not be blank.');
+  //       return;
+  //     }
+  //     const id = posts.length ? posts[posts.length - 1].id+1 : 1;
+  //     const datetime = format(new Date(),'MMMM dd,yyyy pp');
+      
+  //     const newPost = {id,title:postTitle,datetime,body:postBody};
+  //     try{
+  //       const response = await api.post(`/posts`,newPost);
+  //       const allpost = [...posts,response.data];
+  //       // console.log(allpost);
+  //       setPosts(allpost);
+  //       setPostTitle('');
+  //       setPostBody('');
+  //       // localStorage.setItem('blog',JSON.stringify(allpost));
+  //       navigate('/');
+
+  //     }catch(err){
+  //       console.log(`Error ${err.message}`);
+  //     }
+  // }
+
+  //localStorage
+  function NewPostWrapper({postBody,setPostBody,postTitle,setPostTitle,posts,setPosts}){
   function handleSubmit(e){
+    const navigate = useNavigate();
     e.preventDefault();
     if (postTitle.trim() === '' || postBody.trim() === '') {
       alert('Both Title and Body fields must not be blank.');
