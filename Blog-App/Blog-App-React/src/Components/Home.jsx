@@ -5,7 +5,7 @@ import Feed from './Feed.jsx'
 export default function Home({posts}) {
   return (
     <div className='min-h-screen flex flex-col justify-start items-center '>
-        <h1 className='text-3xl text-white font-bold font-mono'>Home Page</h1>
+        <h1 className='text-3xl font-bold font-mono mt-6'>Home Page</h1>
         <div className='flex justify-center items-center'>
           {posts.length? (
             <Feed posts={posts}/>

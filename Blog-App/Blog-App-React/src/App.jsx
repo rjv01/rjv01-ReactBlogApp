@@ -92,9 +92,10 @@ function App() {
   },[posts]);
 
   return (
-    <div className='flex flex-col min-h-screen bgColor'>
+    <div className='flex flex-col min-h-screen'>
       <Router>
-        <Header title="React JS blog" />
+        {/* <Header title="React JS blog" /> */}
+        {/* <h1 className='flex justify-center items-center text-6xl m-2 p-4'>React JS blog</h1> */}
         <Navbar search={search} setSearch={setSearch} />
 
         <Routes>
